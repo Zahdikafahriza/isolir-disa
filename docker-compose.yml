@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  isolir:
+    image: nginx:alpine
+    container_name: isolir
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    volumes:
+      - /home/ubuntu/isolir:/usr/share/nginx/html:ro

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Akses Internet Anda Diisolir – PALMNET</title>
+  <link rel="shortcut icon" href="Logo Disa.png" type="image/x-icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue-dark:   #0d2d6e;
+      --blue-mid:    #1a4db3;
+      --blue-light:  #e8f0fc;
+      --red-main:    #c0392b;
+      --red-bg:      #fdf0ee;
+      --red-border:  #e8a49e;
+      --gold:        #f4a01c;
+      --gold-bg:     #fef8ec;
+      --text-main:   #1e293b;
+      --text-muted:  #64748b;
+      --white:       #ffffff;
+      --bg:          #f0f4fb;
+      --card-shadow: 0 4px 24px rgba(13,45,110,.10);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: .18;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 { width: 500px; height: 500px; background: var(--blue-mid); top: -150px; left: -150px; }
+    .blob-2 { width: 400px; height: 400px; background: #5b9bd5; bottom: -100px; right: -100px; }
+
+    .wifi-decor {
+      position: fixed;
+      opacity: .07;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .wifi-decor.top-left { top: 20px; left: 20px; font-size: 140px; color: var(--blue-mid); }
+    .wifi-decor.bot-left { bottom: 80px; left: 30px; font-size: 100px; color: var(--blue-mid); }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 780px;
+      padding: 48px 24px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page-title { text-align: center; }
+    .page-title h1 {
+      font-size: clamp(22px, 4vw, 32px);
+      font-weight: 800;
+      color: var(--blue-dark);
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+    .page-title p { color: var(--text-muted); margin-top: 6px; font-size: 15px; }
+
+    .alert-card {
+      background: var(--white);
+      border: 1.5px solid var(--red-border);
+      border-radius: 20px;
+      padding: 40px 36px;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+    }
+    .alert-icon {
+      width: 70px;
+      height: 70px;
+      background: var(--red-main);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: #fff;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(192,57,43,.30);
+    }
+    .alert-card h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--red-main);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .alert-card p {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-top: 32px;
+      border-top: 1px solid #e8edf5;
+      padding-top: 28px;
+      flex-wrap: wrap;
+    }
+    .info-item {
+      flex: 1;
+      min-width: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 0 20px;
+      border-right: 1px solid #e8edf5;
+    }
+    .info-item:last-child { border-right: none; }
+    .info-item .icon { font-size: 22px; color: var(--blue-mid); }
+    .info-item .label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .info-item .value { font-size: 15px; font-weight: 600; color: var(--text-main); }
+    .info-item .value.danger { color: var(--red-main); }
+
+    .action-card {
+      background: var(--gold-bg);
+      border: 1.5px solid #f5d27a;
+      border-radius: 16px;
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 2px 12px rgba(244,160,28,.12);
+      flex-wrap: wrap;
+    }
+    .action-card .left { display: flex; align-items: flex-start; gap: 14px; }
+    .action-card .bulb { font-size: 28px; flex-shrink: 0; }
+    .action-card strong { display: block; font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+    .action-card span { font-size: 13.5px; color: var(--text-muted); line-height: 1.5; }
+
+    .contact-section { text-align: center; }
+    .contact-section h3 { font-size: 15px; color: var(--text-muted); margin-bottom: 20px; }
+    .contact-grid {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+      border: 1.5px solid #dce6f5;
+      border-radius: 14px;
+      background: var(--white);
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+    .contact-item {
+      flex: 1;
+      min-width: 140px;
+      padding: 18px 16px;
+      border-right: 1px solid #dce6f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .contact-item:last-child { border-right: none; }
+    .contact-item .c-icon { font-size: 24px; }
+    .contact-item .c-label { font-size: 12px; font-weight: 700; color: var(--blue-dark); letter-spacing: .04em; }
+    .contact-item .c-val { font-size: 13px; color: var(--text-muted); }
+    .btn-wa {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #25d366;
+      color: #fff;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 13.5px;
+      font-weight: 700;
+      text-decoration: none;
+      margin-top: 4px;
+      transition: background .2s, transform .15s;
+    }
+    .btn-wa:hover { background: #1ebe5b; transform: translateY(-1px); }
+
+    footer {
+      background: var(--blue-dark);
+      color: rgba(255,255,255,.75);
+      text-align: center;
+      padding: 18px 24px;
+      font-size: 13px;
+      width: 100%;
+      margin-top: auto;
+      position: relative;
+      z-index: 1;
+    }
+    footer .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 520px) {
+      .alert-card { padding: 28px 20px; }
+      .info-row { flex-direction: column; gap: 16px; }
+      .info-item { border-right: none; border-bottom: 1px solid #e8edf5; padding-bottom: 16px; }
+      .info-item:last-child { border-bottom: none; }
+      .action-card { flex-direction: column; align-items: stretch; }
+      .contact-grid { flex-direction: column; }
+      .contact-item { border-right: none; border-bottom: 1px solid #dce6f5; }
+      .contact-item:last-child { border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="wifi-decor top-left">📶</div>
+  <div class="wifi-decor bot-left">📶</div>
+
+  <div class="wrapper">
+
+    <!-- Logo -->
+    <div class="logo">
+      <img src="logo palm.png" alt="PALMNET Logo" width="160"/>
+    </div>
+
+    <!-- Page title -->
+    <div class="page-title">
+      <h1>Akses Internet Anda Diisolir</h1>
+      <p>Layanan internet Anda sementara dinonaktifkan.</p>
+    </div>
+
+    <!-- Alert card -->
+    <div class="alert-card">
+      <div class="alert-icon">!</div>
+      <h2>Pembayaran Belum Terdeteksi</h2>
+      <p>
+        Kami belum menerima pembayaran untuk tagihan layanan internet Anda.<br/>
+        Sesuai dengan kebijakan layanan, akses internet Anda telah diisolir
+        sampai pembayaran diterima.
+      </p>
+      <div class="info-row">
+        <div class="info-item">
+          <span class="icon">📅</span>
+          <span class="label">Periode Tagihan</span>
+          <span class="value" id="periode"></span>
+        </div>
+        <div class="info-item">
+          <span class="icon">📋</span>
+          <span class="label">Status</span>
+          <span class="value danger" id="status"></span>
+        </div>
+        <div class="info-item">
+          <span class="icon">🕐</span>
+          <span class="label">Tanggal Isolir</span>
+          <span class="value" id="tgl-isolir"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action card -->
+    <div class="action-card">
+      <div class="left">
+        <span class="bulb">💡</span>
+        <div>
+          <strong>Segera lakukan pembayaran</strong>
+          <span>Untuk mengaktifkan kembali layanan internet Anda, silakan lakukan pembayaran tagihan yang tertunggak.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact section -->
+    <div class="contact-section">
+      <h3>Butuh bantuan? Hubungi kami melalui:</h3>
+      <div class="contact-grid">
+        <div class="contact-item">
+          <span class="c-icon">💬</span>
+          <span class="c-label">WhatsApp</span>
+          <a href="https://wa.me/6287831698766?text=Halo%20saya%20ingin%20konfirmasi%20tentang%20pembayaran%20layanan%20internet%20saya." class="btn-wa" target="_blank" rel="noopener">
+            <span>💬</span> Chat WhatsApp
+          </a>
+        </div>
+        <div class="contact-item">
+          <span class="c-icon">🎧</span>
+          <span class="c-label">Customer Service</span>
+          <span class="c-val">+6287831698766</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <span>Terima kasih telah mempercayakan layanan internet Anda kepada PALMNET</span>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+
+      const bulan = [
+        "Januari","Februari","Maret","April","Mei","Juni",
+        "Juli","Agustus","September","Oktober","November","Desember"
+      ];
+
+      const sekarang = new Date();
+
+      const periode =
+        params.get("periode") ||
+        `${bulan[sekarang.getMonth()]} ${sekarang.getFullYear()}`;
+      document.getElementById("periode").textContent = periode;
+
+      document.getElementById("status").textContent =
+        params.get("status") || "Belum Lunas";
+
+      const tanggalIsolir =
+        params.get("tgl") ||
+        `10 ${bulan[sekarang.getMonth()]} ${sekarang.getFullYear()}`;
+      document.getElementById("tgl-isolir").textContent = tanggalIsolir;
+    })();
+  </script>
+
+</body>
+</html>
